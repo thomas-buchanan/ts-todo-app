@@ -4,10 +4,18 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + TS</title>
+    <title>TypeScript Todo App</title>
+    <link rel="stylesheet" href="/src/styles.css" />
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <h1>Todo List</h1>
+      <form id="todo-form">
+        <input id="todo-input" type="text" placeholder="Add a task..." />
+        <button type="submit">Add</button>
+      </form>
+      <ul id="todo-list"></ul>
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
