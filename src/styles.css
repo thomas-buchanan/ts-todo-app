@@ -1,0 +1,16 @@
+body {
+  font-family: sans-serif;
+  max-width: 500px;
+  margin: 2rem auto;
+}
+
+#todo-form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+#todo-list {
+  margin-top: 1rem;
+  list-style: none;
+  padding: 0;
+}
