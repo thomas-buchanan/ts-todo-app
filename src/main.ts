@@ -1,6 +1,6 @@
 import type { Todo } from "./todo";
 
-const todos: Todo[] = [];
+const todos: Todo[] = loadTodos();
 
 const form = document.querySelector('#todo-form') as HTMLFormElement;
 const input = document.querySelector('#todo-input') as HTMLInputElement;
@@ -33,7 +33,7 @@ function renderTodos() {
     // Toggle complete
     li.addEventListener('click', () => {
       todo.completed = !todo.completed;
-      // saveTodos
+      saveTodos();
       renderTodos();
     });
 
@@ -45,11 +45,20 @@ function renderTodos() {
       e.stopPropagation(); // prevent triggering complete toggle
       const index = todos.findIndex((t) => t.id === todo.id);
       todos.splice(index, 1);
-      // saveTodos
+      saveTodos();
       renderTodos();
     });
 
     li.appendChild(deleteBtn);
     list.appendChild(li);
   });
+}
+
+function saveTodos() {
+  localStorage.setItem('todos', JSON.stringify(todos));
+}
+
+function loadTodos(): Todo[] {
+  const todosJson = localStorage.getItem('todos');
+  return todosJson ? JSON.parse(todosJson) : [];
 }
