@@ -28,6 +28,28 @@ function renderTodos() {
   todos.forEach((todo) => {
     const li = document.createElement('li');
     li.textContent = todo.text;
+    li.style.textDecoration = todo.completed ? 'line-through' : 'none';
+
+    // Toggle complete
+    li.addEventListener('click', () => {
+      todo.completed = !todo.completed;
+      // saveTodos
+      renderTodos();
+    });
+
+    // Delete button
+    const deleteBtn = document.createElement('button');
+    deleteBtn.textContent = '🗑️';
+    deleteBtn.style.marginLeft = '1rem';
+    deleteBtn.addEventListener('click', (e) => {
+      e.stopPropagation(); // prevent triggering complete toggle
+      const index = todos.findIndex((t) => t.id === todo.id);
+      todos.splice(index, 1);
+      // saveTodos
+      renderTodos();
+    });
+
+    li.appendChild(deleteBtn);
     list.appendChild(li);
   });
 }
