@@ -1,4 +1,4 @@
-import type { Todo } from "./todo";
+import { Todo } from "./todo";
 
 const todos: Todo[] = loadTodos();
 
@@ -12,14 +12,12 @@ form.addEventListener('submit', (e) => {
   const text = input.value.trim();
   if (!text) return;
 
-  const newTodo: Todo = {
-    id: Date.now(),
-    text,
-    completed: false
-  };
-
+  // Create new Todo
+  const newTodo = new Todo(Date.now(), text);
   todos.push(newTodo);
+
   input.value = '';
+  saveTodos();
   renderTodos();
 });
 
@@ -60,5 +58,9 @@ function saveTodos() {
 
 function loadTodos(): Todo[] {
   const todosJson = localStorage.getItem('todos');
-  return todosJson ? JSON.parse(todosJson) : [];
+  if (!todosJson) return [];
+  
+  const parsed = JSON.parse(todosJson);
+  // Convert plain objects into class instances
+  return parsed.map((t: any) => new Todo(t.id, t.text, t.completed));
 }
