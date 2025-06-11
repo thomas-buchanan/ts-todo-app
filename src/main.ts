@@ -6,6 +6,9 @@ const form = document.querySelector('#todo-form') as HTMLFormElement;
 const input = document.querySelector('#todo-input') as HTMLInputElement;
 const list = document.querySelector('#todo-list') as HTMLUListElement;
 
+type Filter = 'all' | 'active' | 'completed';
+let currentFilter: Filter = 'all';
+
 form.addEventListener('submit', (e) => {
   e.preventDefault();
 
@@ -23,7 +26,15 @@ form.addEventListener('submit', (e) => {
 
 function renderTodos() {
   list.innerHTML = '';
-  todos.forEach((todo) => {
+
+  let filtered = todos;
+  if (currentFilter === 'active') {
+    filtered = todos.filter(t => !t.completed);
+  } else if (currentFilter === 'completed') {
+    filtered = todos.filter(t => t.completed);
+  }
+
+  filtered.forEach((todo) => {
     const li = document.createElement('li');
     li.textContent = todo.text;
     li.style.textDecoration = todo.completed ? 'line-through' : 'none';
@@ -64,3 +75,13 @@ function loadTodos(): Todo[] {
   // Convert plain objects into class instances
   return parsed.map((t: any) => new Todo(t.id, t.text, t.completed));
 }
+
+const filterButtons = document.querySelectorAll('#filters button');
+
+filterButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    const value = button.getAttribute('data-filter') as Filter;
+    currentFilter = value;
+    renderTodos();
+  });
+});

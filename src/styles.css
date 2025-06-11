@@ -14,3 +14,14 @@ body {
   list-style: none;
   padding: 0;
 }
+
+#filters {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+#filters button {
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+}
