@@ -1,6 +1,8 @@
 import { Todo } from "./todo";
+import Sortable from 'sortablejs';
 
-const todos: Todo[] = loadTodos();
+
+let todos: Todo[] = loadTodos();
 
 const form = document.querySelector('#todo-form') as HTMLFormElement;
 const input = document.querySelector('#todo-input') as HTMLInputElement;
@@ -36,6 +38,7 @@ function renderTodos() {
 
   filtered.forEach((todo) => {
     const li = document.createElement('li');
+    li.dataset.id = String(todo.id);
     li.textContent = todo.text;
     li.style.textDecoration = todo.completed ? 'line-through' : 'none';
 
@@ -61,11 +64,11 @@ function renderTodos() {
     li.appendChild(deleteBtn);
     list.appendChild(li);
   });
-}
+};
 
 function saveTodos() {
   localStorage.setItem('todos', JSON.stringify(todos));
-}
+};
 
 function loadTodos(): Todo[] {
   const todosJson = localStorage.getItem('todos');
@@ -74,7 +77,7 @@ function loadTodos(): Todo[] {
   const parsed = JSON.parse(todosJson);
   // Convert plain objects into class instances
   return parsed.map((t: any) => new Todo(t.id, t.text, t.completed));
-}
+};
 
 const filterButtons = document.querySelectorAll('#filters button');
 
@@ -84,4 +87,22 @@ filterButtons.forEach(button => {
     currentFilter = value;
     renderTodos();
   });
+});
+
+const sortable = new Sortable(list, {
+  animation: 150,
+  onEnd: () => {
+    // Rebuild the todos array based on the new DOM order
+    const newOrder: Todo[] = [];
+    const items = list.querySelectorAll('li');
+
+    items.forEach(li => {
+      const id = parseInt(li.dataset.id!);
+      const todo = todos.find(t => t.id === id);
+      if (todo) newOrder.push(todo);
+    });
+    
+    todos = newOrder;
+    saveTodos();
+  }
 });
