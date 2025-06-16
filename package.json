@@ -10,10 +10,15 @@
   },
   "devDependencies": {
     "@types/sortablejs": "^1.15.8",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.5",
+    "tailwindcss": "^4.1.10",
     "typescript": "~5.8.3",
     "vite": "^6.3.5"
   },
   "dependencies": {
+    "@tailwindcss/cli": "^4.1.10",
+    "@tailwindcss/vite": "^4.1.10",
     "sortablejs": "^1.15.6"
   }
 }

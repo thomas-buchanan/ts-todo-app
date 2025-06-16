@@ -1,6 +1,7 @@
+import './styles.css';
+
 import { Todo } from "./todo";
 import Sortable from 'sortablejs';
-
 
 let todos: Todo[] = loadTodos();
 
