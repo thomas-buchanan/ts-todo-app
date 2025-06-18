@@ -12,6 +12,8 @@ const list = document.querySelector("#todo-list") as HTMLUListElement;
 type Filter = "all" | "active" | "completed";
 let currentFilter: Filter = "all";
 
+let searchQuery: string = "";
+
 renderTodos();
 
 form.addEventListener("submit", (e) => {
@@ -32,12 +34,25 @@ form.addEventListener("submit", (e) => {
 function renderTodos() {
   list.innerHTML = "";
 
-  let filtered = todos;
-  if (currentFilter === "active") {
-    filtered = todos.filter((t) => !t.completed);
-  } else if (currentFilter === "completed") {
-    filtered = todos.filter((t) => t.completed);
-  }
+  // let filtered = todos;
+  // if (currentFilter === "active") {
+  //   filtered = todos.filter((t) => !t.completed);
+  // } else if (currentFilter === "completed") {
+  //   filtered = todos.filter((t) => t.completed);
+  // }
+
+  const filtered = todos.filter((todo) => {
+    const matchesFilter =
+      currentFilter === "active"
+        ? !todo.completed
+        : currentFilter == "completed"
+        ? todo.completed
+        : true;
+
+    const matchesSearch = todo.text.toLowerCase().includes(searchQuery);
+
+    return matchesFilter && matchesSearch;
+  });
 
   filtered.forEach((todo) => {
     const li = document.createElement("li");
@@ -124,6 +139,19 @@ function updateFilterStyles(activeButton: HTMLButtonElement) {
   activeButton.classList.remove("bg-white", "text-gray-700");
   activeButton.classList.add("bg-blue-500", "text-white");
 }
+
+const searchInput = document.getElementById("search") as HTMLInputElement;
+
+searchInput.addEventListener("input", () => {
+  searchQuery = searchInput.value.trim().toLowerCase();
+  renderTodos();
+});
+
+document.getElementById("clear-search")?.addEventListener("click", () => {
+  searchQuery = "";
+  searchInput.value = "";
+  renderTodos();
+});
 
 const sortable = new Sortable(list, {
   animation: 150,
