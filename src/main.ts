@@ -34,13 +34,6 @@ form.addEventListener("submit", (e) => {
 function renderTodos() {
   list.innerHTML = "";
 
-  // let filtered = todos;
-  // if (currentFilter === "active") {
-  //   filtered = todos.filter((t) => !t.completed);
-  // } else if (currentFilter === "completed") {
-  //   filtered = todos.filter((t) => t.completed);
-  // }
-
   const filtered = todos.filter((todo) => {
     const matchesFilter =
       currentFilter === "active"
@@ -58,7 +51,7 @@ function renderTodos() {
     const li = document.createElement("li");
 
     li.className =
-      "flex items-center justify-between p-3 bg-white rounded shadow-sm border border-gray-100 mb-1 hover:border-gray-300 transition";
+      "flex items-center justify-between p-3 bg-white rounded shadow-sm border border-gray-100 mb-1 hover:border-gray-300 transition dark:bg-gray-800 dark:border-gray-800 dark:hover:border-gray-500";
     li.dataset.id = String(todo.id);
 
     const label = document.createElement("label");
@@ -73,7 +66,7 @@ function renderTodos() {
     span.textContent = todo.text;
     span.className = todo.completed
       ? "line-through text-gray-400"
-      : "text-gray-800";
+      : "text-gray-800 dark:text-gray-300";
 
     // Toggle complete
     checkbox.addEventListener("change", () => {
@@ -89,7 +82,8 @@ function renderTodos() {
     const deleteBtn = document.createElement("button");
     deleteBtn.textContent = "🗑";
     deleteBtn.title = "Delete todo";
-    deleteBtn.className = "ml-2 text-red-500 hover:text-red-600 transition";
+    deleteBtn.className =
+      "ml-2 text-red-500 hover:text-red-600 transition dark:text-gray-300";
 
     deleteBtn.addEventListener("click", (e) => {
       e.stopPropagation(); // prevent triggering complete toggle
@@ -151,6 +145,28 @@ document.getElementById("clear-search")?.addEventListener("click", () => {
   searchQuery = "";
   searchInput.value = "";
   renderTodos();
+});
+
+// Dark mode
+const html = document.documentElement;
+const darkModeSwitch = document.getElementById(
+  "dark-mode-switch"
+) as HTMLInputElement;
+
+const isDark = localStorage.getItem("darkMode") === "true";
+if (isDark) {
+  html.classList.add("dark");
+  darkModeSwitch.checked = true;
+}
+
+darkModeSwitch.addEventListener("change", () => {
+  if (darkModeSwitch.checked) {
+    html.classList.add("dark");
+    localStorage.setItem("darkMode", "true");
+  } else {
+    html.classList.remove("dark");
+    localStorage.setItem("darkMode", "false");
+  }
 });
 
 const sortable = new Sortable(list, {
